@@ -5,16 +5,16 @@ import (
 )
 
 const (
-	UNIT_SECOND 		= 1
-	UNIT_MILLISECOND 	= 2
-	UNIT_MICROSECOND 	= 3
-	UNIT_PERCENTAGE		= 4
-	UNIT_BYTES			= 5
-	UNIT_KILOBYTES		= 6
-	UNIT_MEGABYTES		= 7
-	UNIT_GIGABYTES		= 8
-	UNIT_TERABYTES		= 9
-	UNIT_COUNTER		= 0
+	UNIT_SECOND			= "s"
+	UNIT_MILLISECOND	= "ms"
+	UNIT_MICROSECOND	= "us"
+	UNIT_PERCENTAGE		= "%"
+	UNIT_BYTES			= "B"
+	UNIT_KILOBYTES		= "KB"
+	UNIT_MEGABYTES		= "MB"
+	UNIT_GIGABYTES		= "GB"
+	UNIT_TERABYTES		= "TB"
+	UNIT_COUNTER		= "c"
 
 	EXIT_OK				= 0
 	EXIT_WARNING		= 1
@@ -32,14 +32,14 @@ type CheckResult struct {
 }
 
 type PerfdataValue struct {
-	label string
-	counter bool
-	unit string
-	value CheckValue
+	Label string
+	Unit string
 	Crit CheckValue
 	Warn CheckValue
 	Min interface {}
 	Max interface {}
+	counter bool
+	value CheckValue
 }
 
 type CheckValue struct {
@@ -54,10 +54,6 @@ func (checkResult *CheckResult) Run() {
 	checkResult.PerformanceData.Crit.convertToType()
 
 	checkResult.validateCheckFunctionResult()
-}
-
-func (checkResult *CheckResult) Get() string {
-	return checkResult.FormatOutput()
 }
 
 func (checkResult *CheckResult) uintCheck(warn uint64, crit uint64, checkValue uint64) int {
@@ -198,7 +194,7 @@ func (checkResult *CheckResult) FormatOutput() string {
 
 	output = checkResult.Output + "|"
 
-	output += checkResult.PerformanceData.label + "=" + fmt.Sprintf(outputFormat, checkResult.PerformanceData.value) + checkResult.PerformanceData.unit + ";;;;"
+	output += checkResult.PerformanceData.Label + "=" + fmt.Sprintf(outputFormat, checkResult.PerformanceData.value.Value) + checkResult.PerformanceData.Unit + ";;;;"
 
 	return output
 }
