@@ -37,10 +37,6 @@ func main() {
 
 func checkDisk() (interface {}, string) {
 	var stat syscall.Statfs_t
-	wd, err := os.Getwd() ; if err != nil {
-		fmt.Println(err)
-	}
-
 	wd = "/"
 
 	syscall.Statfs(wd, &stat)
