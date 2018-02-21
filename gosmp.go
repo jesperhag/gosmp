@@ -59,18 +59,18 @@ func (checkResult *CheckResult) Run() {
 func (checkResult *CheckResult) uintCheck(warn uint64, crit uint64, checkValue uint64) int {
 	if warn > crit {
 		switch {
-		case warn <= checkValue:
-			return EXIT_WARNING
-		case crit <= checkValue:
+		case checkValue < crit:
 			return EXIT_CRITICAL
+		case checkValue < warn:
+			return EXIT_WARNING
 		default:
 			return EXIT_OK
 		}
 	} else {
 		switch {
-		case crit >= checkValue:
+		case checkValue > crit:
 			return EXIT_CRITICAL
-		case warn >= checkValue:
+		case checkValue > warn:
 			return EXIT_WARNING
 		default:
 			return EXIT_OK
@@ -81,18 +81,18 @@ func (checkResult *CheckResult) uintCheck(warn uint64, crit uint64, checkValue u
 func (checkResult *CheckResult) intCheck(warn int64, crit int64, checkValue int64) int {
 	if warn > crit {
 		switch {
-		case warn <= checkValue:
-			return EXIT_WARNING
-		case crit <= checkValue:
+		case checkValue < crit:
 			return EXIT_CRITICAL
+		case checkValue < warn:
+			return EXIT_WARNING
 		default:
 			return EXIT_OK
 		}
 	} else {
 		switch {
-		case crit >= checkValue:
+		case checkValue > crit:
 			return EXIT_CRITICAL
-		case warn >= checkValue:
+		case checkValue > warn:
 			return EXIT_WARNING
 		default:
 			return EXIT_OK
@@ -111,7 +111,6 @@ func (checkResult *CheckResult) floatCheck(warn float64, crit float64, checkValu
 			return EXIT_OK
 		}
 	} else {
-		fmt.Println(warn, crit, checkValue)
 		switch {
 		case checkValue > crit:
 			return EXIT_CRITICAL
